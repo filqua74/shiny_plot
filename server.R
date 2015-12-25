@@ -26,16 +26,32 @@ s1$TIME_PERIOD <- as.numeric(s1$TIME_PERIOD)
 shinyServer(
   function(input, output) {
     
-    output$resultPlot <- renderPlot({
+    theData <- reactive({
+      if (length(input$country)>0) {
         s2 <- s1 %>% filter(geo %in% input$country & 
-                            na_item==input$quantity &
-                            TIME_PERIOD >= input$period[1] &
-                            TIME_PERIOD <= input$period[2])
-        pl <- ggplot(data=s2)
-        pl <- pl + geom_line(aes(x=TIME_PERIOD, y=OBS_VALUE, colour=geo))
-        pl <- pl + labs(x="Year", y="Million of Euros")
-        pl <- pl +  scale_colour_discrete(name  ="Country")
-        print(pl)
+                              na_item==input$quantity &
+                              TIME_PERIOD >= input$period[1] &
+                              TIME_PERIOD <= input$period[2])
+        return(s2)
+      } else {
+        return(s1 %>% filter(TIME_PERIOD==-1))
+      }
+    })
+    
+    output$overallAvg <- renderText({
+      averages <- theData() %>% group_by(TIME_PERIOD) %>% summarise(value = mean(OBS_VALUE))
+      average <- mean(averages$value)
+      average
+    })
+    
+    output$resultPlot <- renderPlot({
+          #averages <- s2 %>% group_by(TIME_PERIOD) %>% summarise(value = mean(OBS_VALUE))
+          #average <- mean(averages$value)
+          pl <- ggplot(data=theData())
+          pl <- pl + geom_line(aes(x=TIME_PERIOD, y=OBS_VALUE, colour=geo))
+          pl <- pl + labs(x="Year", y="Million of Euros")
+          pl <- pl +  scale_colour_discrete(name  ="Country")
+          print(pl)
     })
     
   })
