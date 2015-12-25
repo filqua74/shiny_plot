@@ -29,10 +29,10 @@ countries <- c("Belgium"="BE",
                "Netherlands"="NL")
 
 shinyUI(pageWithSidebar(
-  headerPanel("Macroeconomics in Europe (1975-2010) - source: Eurostat"),
+  headerPanel("Macroeconomics in Europe (1975-2010)"),
  
     sidebarPanel(
-      helpText(HTML('Create a plot for comparing economic variables of several European countries.
+      helpText(HTML('This app has been done as an assingment for the Coursera data science class. Create a plot for comparing economic variables of several European countries.
                You can select the countries and the year range of interest.
                Original data has been retrieved through <a href="http://ec.europa.eu/eurostat/data/sdmx-data-metadata-exchange">Eurostat smdx interface.
                </a>. The complete source url is <a href="http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/naida_10_gdp.sdmx.zip">http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=data/naida_10_gdp.sdmx.zip</a>')),
